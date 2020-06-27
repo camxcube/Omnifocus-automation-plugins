@@ -1,0 +1,46 @@
+/*{
+	"type": "action",
+	"targets": ["omnifocus"],
+	"author": "Cam Cube",
+	"identifier": "",
+	"version": "1.0",
+	"description": "Count the total estimated time of selected projects and tasks",
+	"label": "Total Estimated Time",
+	"shortLabel": "Total Estimated Time"
+}*/
+(() => {
+	var action = new PlugIn.Action(function(selection, sender){
+		
+		var estimatedTimeData = 0 
+		for (var i = 0; i < selection.tasks.length; i++) {
+			estimatedTimeData += selection.tasks[i].estimatedMinutes
+		}
+		
+		for (var i = 0; i < selection.projects.length; i++) {
+			estimatedTimeData += selection.projects[i].estimatedMinutes
+		}
+		
+		var showHour = String(Math.floor(estimatedTimeData/60));
+		
+		var showResultTime = showHour.concat(" Hr")
+		
+		var showMin = String(estimatedTimeData % 60)
+		
+		var showResultTime = showResultTime.concat(" ",showMin, " M")
+		
+		var f = new Alert("Total Estimated Time",String(showResultTime))
+		f.show()
+		
+	
+	});
+	
+	action.validate = function(selection, sender){
+		// validation code
+		// selection options: tasks, projects, folders, tags, allObjects
+		
+		return (selection.tasks.length > 0 || selection.projects.length > 0)
+	};
+	
+	return action;
+	
+})();
